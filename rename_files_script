@@ -1,0 +1,139 @@
+#!/bin/bash
+
+
+log_file="rename.log"
+old_name=""
+new_name=""
+path=`pwd`
+
+lower=false
+upper=false
+prefix=false
+pre=""
+suffix=false
+suf=""
+space=false
+
+
+usage(){
+
+echo ""
+echo " ./$0  [Options] [Arguments][Optional]"
+echo ""
+echo "Options"
+echo "  -P <path>        include a path to search"
+echo "  -f <old_file>    provide old_name for the file"
+echo "  -r <old:new>     provide new_name to change the old one with"
+echo "  -p <prefix>      put a prefix before the file_name"
+echo "  -s <suffix>      put a suffix after file_name"
+echo "  -l <lower>       convert file_name to lowercase"
+echo "  -u <upper>       convert file_name to uppercase"
+echo "  -S <space>       replace spaces of file_name with underscore"
+echo "  -h <info>        for usage menu"
+
+exit 0
+
+}
+
+
+rename() {
+
+file_found=$(find "$path" -name "$new_name" -print -quit | tr -d '\n')
+
+  if [[ -n "$file_found" ]]; then
+      echo "$file_found"
+      echo "Duplicate filename"
+      exit 1
+  else
+      mv "$file_path/$old_name" "$file_path/$new_name"
+      echo "[$(date '+%Y-%m-%d %H:%M:%S')] Renamed:   $old_name     →     $new_name" >> "$log_file"
+  fi
+
+exit 0
+
+}
+
+
+refresh_name() {
+
+if [[ -n "$new_name" ]]; then
+    file_name="${new_name%.*}"
+    extension="${new_name##*.}"
+else    
+    file_name="${old_name%.*}"
+    extension="${old_name##*.}"
+fi
+
+if [[ "$extension" == "$file_name" ]]; then
+    extension=""
+else
+    extension=".$extension"
+fi
+
+exit 0
+
+}
+
+
+
+while getopts "P:r:p:s:luSf:h" opt; do
+  case ${opt} in
+    f) old_name="$OPTARG" ;;
+    P) path="$OPTARG" ;;
+    r) new_name="$OPTARG" ;;
+    p) prefix=true 
+	pre="$OPTARG" ;;
+    s) suffix=true
+	suf="$OPTARG" ;;
+    l) if [[ "$upper" == "true" ]]; then
+           echo "Invalid options -l -u" 
+           exit 1 
+       else
+           lower=true 
+       fi ;;
+    u) if [[ "$lower" == "true" ]]; then
+           echo "Invalid options -u -l"
+           exit 1
+       else
+           upper=true
+       fi ;;
+    S) space=true ;;
+    h|?) usage ;;
+  esac
+done
+
+
+if [[ "$prefix" == "true" ]]; then
+    refresh_name
+    new_name="$pre$file_name$extension"   
+fi
+
+
+if [[ "$suffix" == "true" ]]; then
+    refresh_name
+    new_name="$file_name$suf$extension"
+fi
+
+
+if [[ "$lower" == "true" ]]; then
+    refresh_name
+    new_name="${file_name,,}$extension"
+fi
+
+
+if [[ "$upper" == "true" ]]; then
+    refresh_name
+    new_name="${file_name^^}$extension"
+fi
+
+
+if [[ "$space" == "true" ]]; then
+    refresh_name
+    new_name=$(echo "$file_name$extension" | sed 's/ /_/g')
+fi
+
+
+find  "$path" -name "$old_name" | while read -r file_details; do
+  file_path=$(dirname "$file_details")
+  rename
+done
