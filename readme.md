@@ -98,6 +98,7 @@ rename_files_script -P /home/user/docs -f "my file.txt" -S
 
 - The script prevents duplicate filenames to avoid overwriting existing files.
 - Ensure you have the necessary permissions to rename files in the target directory.
+- If `-P` is not specified, the script will search for files in the current directory by default.
 
 ## 📜 License
 
