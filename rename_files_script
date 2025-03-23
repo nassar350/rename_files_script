@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-log_file="rename.log"
+log_file="/var/log/rename.log"
 old_name=""
 new_name=""
 path=`pwd`
@@ -38,18 +38,16 @@ exit 0
 
 rename() {
 
-file_found=$(find "$path" -name "$new_name" -print -quit | tr -d '\n')
-
-  if [[ -n "$file_found" ]]; then
-      echo "$file_found"
-      echo "Duplicate filename"
+  if [[ -f "$file_path/$new_name" ]]; then
+      echo "$file_path/$new_name"
+      echo "Duplicate Filename"
       exit 1
   else
       mv "$file_path/$old_name" "$file_path/$new_name"
       echo "[$(date '+%Y-%m-%d %H:%M:%S')] Renamed:   $old_name     →     $new_name" >> "$log_file"
   fi
 
-exit 0
+return 0
 
 }
 
@@ -70,7 +68,7 @@ else
     extension=".$extension"
 fi
 
-exit 0
+return 0
 
 }
 
@@ -86,13 +84,13 @@ while getopts "P:r:p:s:luSf:h" opt; do
     s) suffix=true
 	suf="$OPTARG" ;;
     l) if [[ "$upper" == "true" ]]; then
-           echo "Invalid options -l -u" 
+           echo "Invalid options -u -l" 
            exit 1 
        else
            lower=true 
        fi ;;
     u) if [[ "$lower" == "true" ]]; then
-           echo "Invalid options -u -l"
+           echo "Invalid options -l -u"
            exit 1
        else
            upper=true

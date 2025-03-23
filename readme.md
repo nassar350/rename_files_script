@@ -39,7 +39,7 @@ The `rename_files_script` is a Bash script that automates file renaming in a giv
 1️⃣ **Rename a file**:
 
 ```bash
-rename_files_script -P /home/user/docs -f old.txt -r new.txt
+./rename_files_script -P /home/user/docs -f old.txt -r new.txt
 ```
 
 🔹 \*Renames **`old.txt`** to **`new.txt`** in \**`/home/user/docs`*
@@ -47,7 +47,7 @@ rename_files_script -P /home/user/docs -f old.txt -r new.txt
 2️⃣ **Add a prefix**:
 
 ```bash
-rename_files_script -P /home/user/docs -f report.txt -p FINAL_
+./rename_files_script -P /home/user/docs -f report.txt -p FINAL_
 ```
 
 🔹 \*Changes **`report.txt`** to \**`FINAL_report.txt`*
@@ -55,7 +55,7 @@ rename_files_script -P /home/user/docs -f report.txt -p FINAL_
 3️⃣ **Add a suffix**:
 
 ```bash
-rename_files_script -P /home/user/docs -f report.txt -s _FINAL
+./rename_files_script -P /home/user/docs -f report.txt -s _FINAL
 ```
 
 🔹 \*Changes **`report.txt`** to \**`report_FINAL.txt`*
@@ -63,7 +63,7 @@ rename_files_script -P /home/user/docs -f report.txt -s _FINAL
 4️⃣ **Convert filename to lowercase**:
 
 ```bash
-rename_files_script -P /home/user/docs -f MyFile.TXT -l
+./rename_files_script -P /home/user/docs -f MyFile.TXT -l
 ```
 
 🔹 \*Changes **`MyFile.TXT`** to \**`myfile.txt`*
@@ -71,7 +71,7 @@ rename_files_script -P /home/user/docs -f MyFile.TXT -l
 5️⃣ **Convert filename to uppercase**:
 
 ```bash
-rename_files_script -P /home/user/docs -f myfile.txt -u
+./rename_files_script -P /home/user/docs -f myfile.txt -u
 ```
 
 🔹 \*Changes **`myfile.txt`** to \**`MYFILE.TXT`*
@@ -79,7 +79,7 @@ rename_files_script -P /home/user/docs -f myfile.txt -u
 6️⃣ **Replace spaces with underscores**:
 
 ```bash
-rename_files_script -P /home/user/docs -f "my file.txt" -S
+./rename_files_script -P /home/user/docs -f "my file.txt" -S
 ```
 
 🔹 \*Changes **`my file.txt`** to \**`my_file.txt`*
@@ -93,12 +93,14 @@ rename_files_script -P /home/user/docs -f "my file.txt" -S
   [2025-03-22 14:30:00] Renamed: old.txt → new.txt
   ```
 - The log file can be reviewed to track past renaming actions and prevent accidental overwrites.
+- The log file path will be in ```/var/log/rename.log```
 
 ## ⚠️ Notes
 
 - The script prevents duplicate filenames to avoid overwriting existing files.
 - Ensure you have the necessary permissions to rename files in the target directory.
 - If `-P` is not specified, the script will search for files in the current directory by default.
+- You can use ```bash``` instead of ```./``` for running the script.
 
 ## 📜 License
 
